@@ -9,8 +9,16 @@ import keys
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
+main_page = "http://www.elpais.com"
 
 def parse_article(url):
+    if url[-4:] == "/Tes":
+        return parse_article_std(url)
+    else:
+        return parse_article_pol(url)
+
+
+def parse_article_std(url):
     url += "?print=1"
     f = urllib2.urlopen(url)
     html_text = f.read().decode("latin-1").encode("utf-8")
@@ -29,7 +37,7 @@ def parse_article(url):
             head_line = l[2:]
             
     text = "\n".join(text_lines)
-    return keys.extract_keywords(text), head_line
+    return text, head_line
 
 def parse_article_pol(url):
     f = urllib2.urlopen(url)
@@ -46,9 +54,14 @@ def parse_article_pol(url):
     head_line_res = pool.findAll('h1')
     head_line = head_line_res[0].text
 
-    return keys.extract_keywords(text), head_line
+    return text, head_line
 
-def parse_front_page(html_text):
+def parse_front_page():
+    url = main_page +"/"
+    f = urllib2.urlopen(url)
+    html_text = f.read()
+    f.close()
+    
     pool = BeautifulSoup(html_text)
 
     results = pool.findAll('div', attrs={'class' : "estructura_2col_1zq"})
@@ -59,29 +72,29 @@ def parse_front_page(html_text):
     for t in titles:
         link = t.find('a')['href']
         if link[:7] != "http://":
-            link = "http://www.elpais.com"+link
-        if link[-5:] == ".html" or link[-4:] == "/Tes":
+            link = main_page+link
+        if (link[-5:] == ".html" or link[-4:] == "/Tes") and not link.startswith("http://blogs.elpais.com/"):
             links.append(link)
-            print link
     return links
 
 
-def _test_article():
-    url = "http://www.elpais.com/articulo/economia/UE/da/ultimatum/Grecia/apruebe/ajustes/elpepueco/20110620elpepueco_1/Tes"
+def _test_article_std():
     url = "http://www.elpais.com/articulo/internacional/Obama/anuncia/EE/UU/repliega/Afganistan/forma/gradual/elpepuint/20110623elpepuint_1/Tes"
-    print parse_article(url)
+    print parse_article_std(url)
 
 def _test_article_pol():
     url = "http://politica.elpais.com/politica/2011/06/23/actualidad/1308813814_352195.html"
     print parse_article_pol(url)
 
+def _test_article():
+    url = "http://www.elpais.com/articulo/internacional/Obama/anuncia/EE/UU/repliega/Afganistan/forma/gradual/elpepuint/20110623elpepuint_1/Tes"
+    url2 = "http://politica.elpais.com/politica/2011/06/23/actualidad/1308813814_352195.html"
+    url2 = "http://politica.elpais.com/politica/2011/06/22/actualidad/1308772934_025752.html"
+    print parse_article(url2)
 
 def _test_front_page():
     url = "http://www.elpais.com/"
-    f = urllib2.urlopen(url)
-    html_text = f.read()
-    
-    print parse_front_page(html_text)
+    print parse_front_page(url)
 
 if __name__ == '__main__':
     print "* El pais"

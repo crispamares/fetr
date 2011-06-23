@@ -8,31 +8,9 @@ import html2text
 import keys
 import urllib2
 import HTMLParser
+from BeautifulSoup import BeautifulSoup
 
-class MundoParser(HTMLParser.HTMLParser):
-
-    def __init__(self):
-        HTMLParser.HTMLParser.__init__(self)
-        self.body = ""
-        
-        self.in_body = False
-        self.div_number = 0
-
-    def handle_starttag(self, tag, attrs):        
-        if tag == "div" and dict(attrs).get("id") == "tamano":
-            self.in_body = True
-            self.div_number += 1
-    
-    def handle_endtag(self, tag):
-        if tag == "div" and self.in_body:
-            self.div_number -= 1
-            if self.div_number == 0:
-                self.in_body = False
-    
-    def handle_data(self, data):
-        if self.in_body:
-            self.body += data
-
+main_page = "http://www.elmundo.es"
 
 def parse_body(html_text):
     pool = BeautifulSoup(html_text)
@@ -48,40 +26,54 @@ def parse_body(html_text):
 def parse_head_line(html_text):
     pool = BeautifulSoup(html_text)
 
-    results = pool.findAll('h1')
+    results = pool.findAll(['h2','h1'])
     return results[0].text
     
 
 def parse_article(url):
     f = urllib2.urlopen(url)
-    html_text = f.read().decode("latin-1").encode("utf-8")
+    html_text = f.read()
 
-    parser = MundoParser()
-    parser.feed(html_text)
+    head_line = parse_head_line(html_text)
+    text = parse_body(html_text)
     
-    mark_down = html2text.html2text(html_text)
-    body_mark_down = parser.body
+    return text, head_line
 
-    print body_mark_down
 
-    mark_down = mark_down.replace("\n\n", "#fetr#").replace("\n"," ").replace("#fetr#", "\n")
-    body_mark_down = body_mark_down.replace("\n\n", "#fetr#").replace("\n"," ").replace("#fetr#", "\n")
+def parse_front_page():
+    url = main_page+"/"
 
-    lines = mark_down.split("\n")
-    text_lines = []
-    head_line = ""
-    for l in lines:
-        if l and l[0].isalnum():
-            text_lines.append(l)
-        if l and l[0:3] == "## ":
-            head_line = l[3:]
-        
+    f = urllib2.urlopen(url)
+    html_text = f.read()
+    f.close()
     
-    text = "\n".join(text_lines)
-    return keys.extract_keywords(body_mark_down), head_line
+    pool = BeautifulSoup(html_text)
+
+    results = pool.findAll('div', attrs={'class' : 'col col_01'})
+
+    titles = results[0].findAll(['h2', 'h3', 'h4'])
+    
+    links = []
+    for t in titles:
+        l = t.find('a')
+        if l:
+            link = l['href']
+        if link[:7] != "http://":
+            link = main_page+link
+        if link[-5:] == ".html" and (link[:29] == "http://www.elmundo.es/elmundo" or link[:29] == "http://www.elmundo.es/america"):
+            links.append(link)
+    return links
+
+def _test_article():
+    url = "http://www.elmundo.es/america/2011/06/20/estados_unidos/1308582993.html"
+    url = "http://www.elmundo.es/america/2011/06/21/estados_unidos/1308690697.html"
+    url = "http://elmundo.orbyt.es/2011/06/23/orbyt_en_elmundo/1308822185.html"
+    url = "http://www.elmundo.es/elmundo/2011/06/23/internacional/1308825436.html"
+    print parse_article(url)
+
+def _test_front_page():
+    print parse_front_page()
 
 if __name__ == '__main__':
     print "* El mundo"
-
-    url = "http://www.elmundo.es/america/2011/06/20/estados_unidos/1308582993.html"
-    print parse_article(url)
+    print _test_article()
