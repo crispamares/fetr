@@ -33,6 +33,25 @@ class MundoParser(HTMLParser.HTMLParser):
         if self.in_body:
             self.body += data
 
+
+def parse_body(html_text):
+    pool = BeautifulSoup(html_text)
+    
+    
+    results = pool.findAll('div', attrs={'id' : 'tamano'})
+    paragraphs = results[0].findAll('p')
+    text = ""
+    for p in paragraphs:
+        text += p.text+ "\n"
+    return text
+ 
+def parse_head_line(html_text):
+    pool = BeautifulSoup(html_text)
+
+    results = pool.findAll('h1')
+    return results[0].text
+    
+
 def parse_article(url):
     f = urllib2.urlopen(url)
     html_text = f.read().decode("latin-1").encode("utf-8")
