@@ -48,15 +48,19 @@ def parse_front_page():
     
     pool = BeautifulSoup(html_text)
     
-    results = pool.findAll('div', attrs={'id' : 'mod_9770'})
-    titles = results[0].findAll('h2')
+    contenido = pool.find('div', attrs={'id' : 'contenido'})
+    divs = [contenido.findAll('div')[1]]
+    divs.append(divs[0].findNextSibling())
     
     links = []
-    for t in titles:
-        link = t.find('a')['href']
-        if link[:7] != "http://":
-            link = main_page+link
-        links.append(link)
+    for div in divs:
+        titles = div.findAll('h2')
+
+        for t in titles:
+            link = t.find('a')['href']
+            if link[:7] != "http://":
+                link = main_page+link
+            links.append(link)
     
     return links
 
@@ -72,4 +76,4 @@ def _test_front_page():
 if __name__ == '__main__':
     print "* Cinco dias"
 
-    print _test_article()
+    print _test_front_page()

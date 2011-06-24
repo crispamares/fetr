@@ -7,7 +7,6 @@ Created on 20/06/2011
 import keys
 import urllib2
 from BeautifulSoup import BeautifulSoup
-from pygame.docs.__main__ import main_page
 
 main_page = "http://www.expansion.com"
 

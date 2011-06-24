@@ -17,9 +17,11 @@ def get_front_pages_links(parsers):
         print page, "Done", len(l)
         links[page] = l
     return links
-
-if __name__ == '__main__':
-    print "* Robot"
+    
+def run(errors=[]):
+    '''
+    @return: [[page, link, head_line, text, i]]
+    '''
     parsers_modules = []
     parsers_modules.append(elpais_parser)
     parsers_modules.append(elmundo_parser)
@@ -29,14 +31,24 @@ if __name__ == '__main__':
     parsers = dict( map ( lambda x: (x.main_page, x), parsers_modules))        
     
     links = get_front_pages_links(parsers)
-    print links
     
+    papers = []
     for page in links:
         parser = parsers[page]
+        i = 0
         for link in links[page]:
             try:
                 text, head_line = parser.parse_article(link)
-                #print link, "Done", head_line
+                papers.append([page, link, head_line, text, i])
+                i += 0
             except:
-                print "ERROR::", link
+                errors.append(link)
             
+    return papers
+
+if __name__ == '__main__':
+    print "* Robot"
+    papers = run()
+    import pickle
+    with open("/tmp/papers.pickle", "w") as f:
+        pickle.dump(papers, f)
