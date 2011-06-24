@@ -7,65 +7,35 @@ Created on 23/06/2011
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
-class StockParser(HTMLParser.HTMLParser):
+def parser_stocks(url):
+    '''
+    @return: [Last, Diff, Time, Volume]
+    '''
+    f = urllib2.urlopen(url)
+    html_text = f.read()
+    f.close()
 
-    def __init__(self):
-        HTMLParser.HTMLParser.__init__(self)
-        self.inside_table = False
-        self.inside_tr = False
-        self.inside_td = False
-        self.stocks = {}
-    
-        self.actual_data = []
-        
-        self.handle_actual_tag = self.handle_table
-        self.i = 0
+    #
+    # The web has some errors    
+    html_text = "<html><head></head>"+html_text[html_text.find('body'):]
 
-    def handle_starttag(self, tag, attrs):
-        if tag == self.next_tag():
-            self.handle_actual_tag(tag, attrs)
-
-    def handle_endtag(self, tag):
-        if tag == "table" and self.inside_table:
-            self.inside_table = False
-            self.inside_td = False
-            self.inside_tr = False
-            self.handle_actual_tag = lambda t,a: None
-        if self.inside_tr and tag == "tr":
-            self.stocks[self.actual_data[0].strip()] = map(lambda s: float(s.replace(".","").replace(",",".")), self.actual_data[1:-2]) + self.actual_data[-2:]
-            self.actual_data = []
-            
-    def handle_data(self, data):
-        if self.inside_tr and data != "\r\n":
-            self.actual_data.append(data)
+#    parser = LiveStockParser()
+#    parser.feed(html_text)
+    pool = BeautifulSoup(html_text)
+    table = pool.find("table", attrs={'width' : '300', 'align' : 'center'})
+    values = table.findAll("td", attrs={'align' : 'Right'})
     
-    def handle_table(self, tag, attrs):
-        if dict(attrs).get('width') == '96%':
-            self.inside_table = True
-            self.handle_actual_tag = self.handle_tr
+    results = []  
+    results.append(float(values[0].text.replace(".","").replace(",",".")))
+    results.append(float(values[1].text.replace("%","").replace(",",".")))
+    results.append(values[2].text)
+    results.append(float(values[3].text.replace(".","").replace(",",".")))
     
-    def handle_tr(self, tag, attrs):
-        self.i += 1
-        if self.i > 1:
-            self.inside_tr = True
-#            self.handle_actual_tag = self.handle_td
-#    
-#    def handle_td(self, tag, attrs):
-#        pass
-    
-    def next_tag(self):
-        next = 'table'
-        if self.inside_table: next = 'tr'
-        if self.inside_tr: next = 'td'
-        return next
+    return results
 
 
 if __name__ == "__main__":
-    print "*Come On"
-    f = urllib2.urlopen('http://www.pcbolsa.com/movil/MovilCotizacion.aspx?ISIN=ES0178430E18&CodIndi=x&Plaza=55&Cotizacion=TELEFONICA')
-    html_text = f.read()
-    f.close()
+    url = 'http://www.pcbolsa.com/movil/MovilCotizacion.aspx?ISIN=ES0178430E18&CodIndi=x&Plaza=55&Cotizacion=TELEFONICA'
+    print parser_stocks(url)
     
-    pool = BeautifulSoup(html_text)
-    results = pool.findAll('')
-    print results
+    
