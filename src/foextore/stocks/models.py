@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from fetr_lib import live_stocks
-import datetime
+from datetime import datetime
 # Create your models here.
 
+def is_bolsa_opened():
+    opened = False
+    now = datetime.now()
+    if now.isoweekday() < 6: # Monday..Friday
+        open_time = datetime(now.year, now.month, now.day, 8, 45)
+        close_time = datetime(now.year, now.month, now.day, 17, 55)
+        if now > open_time and now < close_time:
+            opened = True
+    return opened
 
 def feed_stocks():
     for comp in Companies.objects.all():
@@ -11,8 +20,8 @@ def feed_stocks():
     
         hour, minute = map(int, stock[2].split(":"))
         
-        now = datetime.datetime.now()
-        reg_time = datetime.datetime(now.year, now.month, now.day, hour, minute)
+        now = datetime.now()
+        reg_time = datetime(now.year, now.month, now.day, hour, minute)
         Stoks(company = comp,
               last = stock[0],
               diff = stock[1],

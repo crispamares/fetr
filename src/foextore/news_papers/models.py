@@ -9,7 +9,10 @@ def feed_news_papers():
     import pickle
     with open("/tmp/papers.pickle", "r") as f:
         papers = pickle.load(f)
-    #papers = crawler.run(errors)
+
+#    c = crawler.Crawler()
+#    links = c.get_front_pages_links()
+#    papers = c.run(links)
     
     for paper in papers:
         link = paper[1]
