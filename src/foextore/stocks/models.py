@@ -41,6 +41,9 @@ class Companies(models.Model):
     tag =  models.CharField(max_length=5)
     feed_url = models.CharField(max_length=200)
 
+    def natural_key(self):
+        return (self.tag, self.name)
+
 class Stoks(models.Model):
     company = models.ForeignKey(Companies)
     last = models.FloatField()
@@ -50,7 +53,7 @@ class Stoks(models.Model):
     timestamp = models.DateTimeField(auto_now=True, auto_now_add=True)
 
     class Meta(object):
-        ordering = ['timestamp']
+        ordering = ['-timestamp']
         
     def __unicode__(self):
         return u'%f %s %s' %(self.last, self.reg_time.isoformat(), self.timestamp.isoformat())

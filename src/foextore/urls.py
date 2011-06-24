@@ -7,6 +7,8 @@ admin.autodiscover()
 import django_cron
 django_cron.autodiscover()
 
+from stocks.views import stocks
+
 urlpatterns = patterns('',
     # Example:
     # (r'^foextore/', include('foextore.foo.urls')),
@@ -16,4 +18,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
+    (r'^stocks/$', stocks),
+    (r'^stocks/last/$', stocks, {'last':True}),
 )

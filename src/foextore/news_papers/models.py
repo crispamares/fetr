@@ -6,13 +6,9 @@ from fetr_lib import crawler
  
 def feed_news_papers():
     errors = []
-    import pickle
-    with open("/tmp/papers.pickle", "r") as f:
-        papers = pickle.load(f)
-
-#    c = crawler.Crawler()
-#    links = c.get_front_pages_links()
-#    papers = c.run(links)
+    c = crawler.Crawler()
+    links = c.get_front_pages_links()
+    papers = c.run(links, errors)
     
     for paper in papers:
         link = paper[1]
@@ -52,7 +48,7 @@ class NewsPapers(models.Model):
         return u'%s' %(self.link)
     
     class Meta(object):
-        ordering = ['timestamp', 'front_page_position']
+        ordering = ['-timestamp', 'front_page_position']
 
     def last_first_paper(self):
         return [a.link for a in NewsPapers.objects.all() if a.front_page_position == 0].pop()
