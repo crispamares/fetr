@@ -20,8 +20,8 @@ def stocks(request, last=False):
         results = results.filter(company=c)
     if from_datetime:
         results = results.filter(reg_time__gt=from_datetime)
-    if last and results.exists():
-        results = [results[0]]
+    if last:
+        results = results[:1]
         
     data = serializers.serialize("json", results, use_natural_keys=True)
     return HttpResponse(data)

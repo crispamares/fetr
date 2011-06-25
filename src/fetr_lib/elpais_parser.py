@@ -90,7 +90,8 @@ def _test_article():
     url = "http://www.elpais.com/articulo/internacional/Obama/anuncia/EE/UU/repliega/Afganistan/forma/gradual/elpepuint/20110623elpepuint_1/Tes"
     url2 = "http://politica.elpais.com/politica/2011/06/23/actualidad/1308813814_352195.html"
     url2 = "http://politica.elpais.com/politica/2011/06/22/actualidad/1308772934_025752.html"
-    print parse_article(url2)
+    url = "http://www.elpais.com/articulo/deportes/Alonso/marca/paso/Valencia/elpepudep/20110624elpepudep_11/Tes"
+    print parse_article(url)
 
 def _test_front_page():
     url = "http://www.elpais.com/"

@@ -29,7 +29,6 @@ def feed_stocks():
               volume = stock[3]
               ).save()
 
-
 def create_companies():
     Companies(name = "Telefónica", 
               tag = "TEF",

@@ -27,7 +27,7 @@ def feed_news_papers():
         elif paper_set[0].head_line != paper[2]:
             print "Actualizo"
             paper_set[0].head_line = paper[2]
-            paper_set[0].text = paper[2]
+            paper_set[0].text = paper[3]
             paper_set[0].front_page_position = paper[4]
             paper_set[0].save()
             Log(msg = link, type_err ="Updating").save()
@@ -48,10 +48,14 @@ class NewsPapers(models.Model):
         return u'%s' %(self.link)
     
     class Meta(object):
-        ordering = ['-timestamp', 'front_page_position']
+        ordering = ['front_page_position', '-timestamp']
 
     def last_first_paper(self):
         return [a.link for a in NewsPapers.objects.all() if a.front_page_position == 0].pop()
+    
+    @staticmethod
+    def get_web_sites():
+        return set([val['web_site'] for val in NewsPapers.objects.values('web_site')])
 
 class KeyWords(models.Model):
     word = models.CharField(max_length=50)

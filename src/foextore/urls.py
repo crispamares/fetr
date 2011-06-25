@@ -8,6 +8,7 @@ import django_cron
 django_cron.autodiscover()
 
 from stocks.views import stocks
+from news_papers.views import papers, head_lines
 
 urlpatterns = patterns('',
     # Example:
@@ -20,4 +21,9 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^stocks/$', stocks),
     (r'^stocks/last/$', stocks, {'last':True}),
+    (r'^papers/$', papers),
+    (r'^papers/(\d{1,2})/$', papers),
+    (r'^head_lines/$', head_lines),
+    (r'^head_lines/(\d{1,2})/$', head_lines),
+
 )

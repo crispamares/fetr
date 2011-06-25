@@ -38,7 +38,7 @@ def parse_article(url):
     head_line = parse_head_line(html_text)
     text = parse_body(html_text)
     
-    return head_line, text
+    return text, head_line
 
 def parse_front_page():
     url = main_page + "/"

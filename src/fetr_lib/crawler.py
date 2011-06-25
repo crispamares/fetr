@@ -38,7 +38,7 @@ class Crawler(object):
                 try:
                     text, head_line = parser.parse_article(link)
                     papers.append([page, link, head_line, text, i])
-                    i += 0
+                    i += 1
                 except:
                     errors.append(link)
                 
