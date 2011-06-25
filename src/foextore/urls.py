@@ -1,5 +1,9 @@
 from django.conf.urls.defaults import *
 
+# Statics
+from django.views.static import *
+from django.conf import settings
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -9,6 +13,7 @@ django_cron.autodiscover()
 
 from stocks.views import stocks
 from news_papers.views import papers, head_lines
+from foextore.views import index
 
 urlpatterns = patterns('',
     # Example:
@@ -19,6 +24,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
+    (r'^$', index),
     (r'^stocks/$', stocks),
     (r'^stocks/last/$', stocks, {'last':True}),
     (r'^papers/$', papers),
@@ -26,4 +32,9 @@ urlpatterns = patterns('',
     (r'^head_lines/$', head_lines),
     (r'^head_lines/(\d{1,2})/$', head_lines),
 
+)
+
+# Required to make static serving work
+urlpatterns += patterns('',
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 )

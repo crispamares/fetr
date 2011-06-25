@@ -1,0 +1,101 @@
+body {
+	background: #1A1708 url("/media/hand.png") no-repeat fixed bottom right;
+	color: #CEE0A7;	
+	margin:50px 0px; 
+	padding:0px;
+	text-align:center;
+	font-family: Ubuntu, Courier;
+	line-height: 1.4em;
+	} 
+
+#body_content {
+	width:930px;
+	margin:0px auto;
+	text-align:left;
+	padding:30px;
+	border:1px dashed #777777;
+	border-radius:9px 9px 0 0; 
+	-moz-border-radius: 9px 9px 0 0;
+	/*
+	-moz-box-shadow: 0 -5px 9px -2px #B23D51;
+	-webkit-box-shadow: 0 -5px 9px -2px #B23D51;
+	*/
+}
+
+#content {
+	min-height: 400px;
+}
+
+h1 {
+	color: #8CB23D;
+	padding-bottom: 20px;
+}
+
+a {
+	/*color: #324015;*/
+	color: #B23D51;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#footer {
+	border-radius:9px 9px 0 0 ;
+	-moz-border-radius:9px 9px 0 0;
+	-moz-box-shadow: 0 3px 9px -1px #B23D51;
+	-webkit-box-shadow: 0 3px 9px -1px #B23D51;
+	height: 3em;
+	padding: 10px;
+	margin-top: 30px;
+	text-align: center;
+}
+
+#nav {
+	float: right;
+}
+
+form label {
+	padding: 1em;
+}
+
+.solved {
+	color: #777777;
+	padding:10px;
+	line-height: 0.5em;
+	font-size:small;
+}
+
+.solved_step {
+	background: url("/media/tick.png") no-repeat left;
+	padding-left: 25px;
+	display: block;
+}
+
+.no_solved_step {
+	padding-left: 25px;
+	display: block;
+}
+
+
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+#error_answer,
+.errorlist li {
+    color: #EE0900;
+    display: block;
+    font-size: 10px;
+    margin: 0 0 3px;
+    padding: 4px 5px;
+}
+
+/*
+.errorlist {
+	color: #EE0900;
+}*/

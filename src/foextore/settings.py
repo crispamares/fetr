@@ -4,7 +4,7 @@ import os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.realpath((__file__))))
 sys.path.append(ROOT)
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

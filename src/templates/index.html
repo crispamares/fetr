@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<div id="content">
+	<p>The API reference of the backend</p>
+	
+	<ul>
+		<li><a href="stocks">/stocks</a> : Return all stocks</li>
+		<li><a href="stocks/last">/stocks/last</a> : Return the last stock of each company</li>
+		<ul>
+			<li>?comp=[Tag of the company] : eg: stocks only of Telefónica if Tag is TEF</li>	
+			<li>?from=[datetime in isoformat] : eg: stocks after "%Y-%m-%d %H:%M:%S" eg:"2005-09-01 12:30:09"</li>	
+		</ul>
+	</ul>
+
+	<ul>
+		<li><a href="/papers">/papers</a> : Return all papers</li>
+		<li><a href="/papers/1">/papers/[num]</a> : Return the [num] first articles from all the websites. num = 1..99</li>
+		<li><a href="/head_lines">/head_lines</a> : Return all papers head_lines</li>
+		<li><a href="/head_lines/1">head_lines/[num]</a> : Return head_lines of the [num] first articles from all the websites. num = 1..99</li>
+		<ul>
+			<li>?from=[datetime in isoformat] : articles after "%Y-%m-%d %H:%M:%S" eg:"2005-09-01 12:30:09"</li>
+			<li>?web_site=[url] : only articles from the selected url eg:"http://www.elmundo.es"</li>
+		</ul>
+	</ul>
+	
+	
+</div>
+{% endblock %}
