@@ -1,5 +1,5 @@
 from django.db import models
-from fetr_lib import crawler  
+from fetr_lib import crawler, keys
 
 # Create your models here.
  
@@ -24,6 +24,18 @@ def feed_news_papers():
                             front_page_position = paper[4] 
                             )
             np.save()
+            #try:
+            analizer = keys.NLAnalizer()
+            nnp_keys = analizer.get_nnp(paper[3])
+            for nnp_key in nnp_keys:   
+                KeyWords(paper = np,
+                         proper_noun = True,
+                         word = nnp_key[0],
+                         ocurrences = nnp_key[1]
+                         ).save()
+            #except:
+            #    Log(msg = paper[1], type_err ="KeyWords Error").save()
+
         elif paper_set[0].head_line != paper[2]:
             print "Actualizo"
             paper_set[0].head_line = paper[2]
@@ -67,6 +79,8 @@ class KeyWords(models.Model):
     def __unicode__(self):
         return u'%s' %(self.word)
     
+    class Meta(object):
+        ordering = ['-ocurrences']
 class Log(models.Model):
     timestamp = models.DateTimeField(auto_now=True, auto_now_add=True)
     msg = models.CharField(max_length=300)

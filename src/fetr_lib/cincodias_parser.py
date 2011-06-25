@@ -8,6 +8,7 @@ import keys
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
+
 main_page = "http://www.cincodias.com"
 
 def parse_body(html_text):
@@ -76,4 +77,9 @@ def _test_front_page():
 if __name__ == '__main__':
     print "* Cinco dias"
 
-    print _test_front_page()
+    url = "http://www.cincodias.com/articulo/opinion/reino-unido-isla/20110623cdscdiopi_7/"
+    url = "http://www.cincodias.com/articulo/empresas/industria-espanola-falla-comercializacion/20110623cdscdiemp_21/"
+    text,_hl = parse_article(url)
+    print type(text)
+    a = keys.NLAnalizer()
+    print a.get_nnp(text)
