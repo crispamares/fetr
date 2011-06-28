@@ -33,6 +33,14 @@ def feed_news_papers():
                          word = nnp_key[0],
                          ocurrences = nnp_key[1]
                          ).save()
+            freq_keys = analizer.extract_freq_keywords(paper[3])
+            for f_key in freq_keys:   
+                KeyWords(paper = np,
+                         proper_noun = False,
+                         word = f_key[0],
+                         ocurrences = f_key[1]
+                         ).save()
+
             #except:
             #    Log(msg = paper[1], type_err ="KeyWords Error").save()
 
@@ -46,7 +54,7 @@ def feed_news_papers():
     if errors:
         for error in errors:
             Log(msg = error, type_err ="Error parsing").save()
-            
+
  
 class NewsPapers(models.Model):
     web_site = models.CharField(max_length=100)
@@ -59,6 +67,9 @@ class NewsPapers(models.Model):
     def __unicode__(self):
         return u'%s' %(self.link)
     
+    def natural_key(self):
+        return self.link
+
     class Meta(object):
         ordering = ['front_page_position', '-timestamp']
 

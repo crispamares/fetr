@@ -7,7 +7,7 @@ class NLAnalizer(object):
     tagger = nltk.UnigramTagger(model=model, backoff = nltk.UnigramTagger(nltk.corpus.cess_esp.tagged_sents()))
     
     
-    def extract_keywords(self, text, num=10):
+    def extract_freq_keywords(self, text, num=10):
 
         tokens = PunktWordTokenizer().tokenize(text) 
         fdist = nltk.FreqDist([w.lower() for w in tokens])

@@ -39,11 +39,20 @@ def head_lines(request, first=None):
     
 def keywords(request):
     link = request.GET.get('link',None)
+    timestring = request.GET.get('from',None) #timestring = "2005-09-01 12:30:09"
+    time_format = "%Y-%m-%d %H:%M:%S"
+    from_datetime = None
+    if timestring:
+        from_datetime = datetime.datetime.fromtimestamp(time.mktime(time.strptime(timestring, time_format)))
+
+
 
     results = KeyWords.objects.all()
+    if from_datetime:
+        results = results.filter(timestamp__gt=from_datetime)
     if link:
         paper = NewsPapers.objects.get(link=link)
         results = results.filter(paper=paper)
-    data = serializers.serialize("json", results)
+    data = serializers.serialize("json", results, use_natural_keys=True)
     return HttpResponse(data)
     
