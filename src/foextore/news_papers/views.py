@@ -37,3 +37,13 @@ def head_lines(request, first=None):
     data = serializers.serialize("json", results, fields=('front_page_position','web_site','link','head_line', 'timestamp'))
     return HttpResponse(data)
     
+def keywords(request):
+    link = request.GET.get('link',None)
+
+    results = KeyWords.objects.all()
+    if link:
+        paper = NewsPapers.objects.get(link=link)
+        results = results.filter(paper=paper)
+    data = serializers.serialize("json", results)
+    return HttpResponse(data)
+    

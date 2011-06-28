@@ -12,7 +12,7 @@ import django_cron
 django_cron.autodiscover()
 
 from stocks.views import stocks
-from news_papers.views import papers, head_lines
+from news_papers.views import papers, head_lines, keywords
 from foextore.views import index
 
 urlpatterns = patterns('',
@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     (r'^papers/(\d{1,2})/$', papers),
     (r'^head_lines/$', head_lines),
     (r'^head_lines/(\d{1,2})/$', head_lines),
-
+    (r'^keywords/$', keywords),
 )
 
 # Required to make static serving work

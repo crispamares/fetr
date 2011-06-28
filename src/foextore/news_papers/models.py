@@ -81,6 +81,7 @@ class KeyWords(models.Model):
     
     class Meta(object):
         ordering = ['-ocurrences']
+
 class Log(models.Model):
     timestamp = models.DateTimeField(auto_now=True, auto_now_add=True)
     msg = models.CharField(max_length=300)
