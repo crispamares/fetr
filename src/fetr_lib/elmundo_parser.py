@@ -5,7 +5,6 @@ Created on 20/06/2011
 '''
 
 import html2text
-import keys
 import urllib2
 import HTMLParser
 from BeautifulSoup import BeautifulSoup
@@ -29,7 +28,7 @@ def parse_head_line(html_text):
     results = pool.findAll(['h2'])
     if not results:
         results = pool.findAll(['h1'])
-    print results
+
     return results[0].text
     
 
@@ -73,11 +72,13 @@ def _test_article():
     url = "http://elmundo.orbyt.es/2011/06/23/orbyt_en_elmundo/1308822185.html"
     url = "http://www.elmundo.es/elmundo/2011/06/23/internacional/1308825436.html"
     url = "http://www.elmundo.es/elmundo/2011/06/28/espana/1309278888.html"
-    parse_article(url)
+    t, h = parse_article(url)
+    print h,t
+
 
 def _test_front_page():
     print parse_front_page()
 
 if __name__ == '__main__':
     print "* El mundo"
-    print _test_article()
+    _test_article()
