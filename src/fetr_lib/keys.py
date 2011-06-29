@@ -30,6 +30,7 @@ class NLAnalizer(object):
         list_of_NNPs = []
         for sentence in sentences:
             tokens = PunktWordTokenizer().tokenize(sentence)
+            tokens = [token.encode('utf-8') for token in tokens]
             tagged =  self.tagger.tag(tokens)
     
             temp_npps = []
@@ -39,7 +40,8 @@ class NLAnalizer(object):
                 elif temp_npps:
                     list_of_NNPs.append(' '.join(temp_npps))
                     temp_npps = []
-
+         
+        list_of_NNPs = [token.decode('utf-8') for token in list_of_NNPs]
         return nltk.FreqDist(list_of_NNPs).items()
 
 if __name__ == "__main__":
