@@ -73,8 +73,8 @@ def _test_article():
     url = "http://www.elmundo.es/elmundo/2011/06/23/internacional/1308825436.html"
     url = "http://www.elmundo.es/elmundo/2011/06/28/espana/1309278888.html"
     t, h = parse_article(url)
-    print h,t
 
+    print h,t
 
 def _test_front_page():
     print parse_front_page()
